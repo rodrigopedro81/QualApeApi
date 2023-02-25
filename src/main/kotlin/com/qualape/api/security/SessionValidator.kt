@@ -1,5 +1,6 @@
 package com.qualape.api.security
 
+import UserRepository
 import com.qualape.api.errorHandling.*
 import com.qualape.api.models.Session
 import com.qualape.api.models.User
@@ -15,9 +16,6 @@ interface SessionRepository: JpaRepository<Session, Long> {
     fun findByUserId(userId: String): Optional<Session>
     fun findByLastValidDay(lastValidDay: LocalDate): List<Session>
 }
-
-@Repository
-interface UserRepository: JpaRepository<User, String>
 
 @Service
 class AuthenticationService@Autowired constructor(
