@@ -75,8 +75,7 @@ class AuthenticationService@Autowired constructor(
         } else {
             val newUser = User.createNewUser(email, password, name)
             userRepository.save(newUser)
-            val newSession = Session(userId = newUser.email)
-            return sessionRepository.save(newSession)
+            return createNewSession(newUser)
         }
     }
 }
