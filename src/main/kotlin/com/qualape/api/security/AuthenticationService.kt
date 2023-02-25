@@ -1,24 +1,18 @@
 package com.qualape.api.security
 
-import UserRepository
 import com.qualape.api.errorHandling.*
 import com.qualape.api.models.Session
 import com.qualape.api.models.User
+import com.qualape.api.repositories.SessionRepository
+import com.qualape.api.repositories.UserRepository
+import com.qualape.api.security.BlowfishCryptographer.cryptographed
+import com.qualape.api.security.BlowfishCryptographer.decryptographed
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.stereotype.Repository
 import org.springframework.stereotype.Service
 import java.time.LocalDate
-import java.util.*
-
-@Repository
-interface SessionRepository: JpaRepository<Session, Long> {
-    fun findByUserId(userId: String): Optional<Session>
-    fun findByLastValidDay(lastValidDay: LocalDate): List<Session>
-}
 
 @Service
-class AuthenticationService@Autowired constructor(
+class AuthenticationService @Autowired constructor(
     private val sessionRepository: SessionRepository,
     private val userRepository: UserRepository
 ) {
@@ -46,7 +40,7 @@ class AuthenticationService@Autowired constructor(
         val userRequest = userRepository.findById(email)
         if (userRequest.isPresent) {
             val userData = userRequest.get()
-            if (password == userData.password) {
+            if (password == userData.password.decryptographed()) {
                 return createNewSession(userData)
             } else {
                 throw WrongPasswordException()
@@ -61,7 +55,7 @@ class AuthenticationService@Autowired constructor(
         if (userExists) {
             throw UserAlreadyExistsException()
         } else {
-            val newUser = User.createNewUser(email, password, name)
+            val newUser = User.createNewUser(email, password.cryptographed(), name)
             userRepository.save(newUser)
             return createNewSession(newUser)
         }
@@ -77,6 +71,3 @@ class AuthenticationService@Autowired constructor(
         }
     }
 }
-
-
-
