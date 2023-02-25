@@ -58,16 +58,6 @@ class AuthenticationService@Autowired constructor(
         }
     }
 
-    private fun createNewSession(user: User): Session {
-        val sessionExists = sessionRepository.findByUserId(user.email).isPresent
-        return if (sessionExists) {
-            throw SessionAlreadyExistsException()
-        } else {
-            val newSession = Session(userId = user.email)
-            sessionRepository.save(newSession)
-        }
-    }
-
     fun registerNewUser(email: String, password: String, name:String): Session {
         val userExists = userRepository.existsById(email)
         if (userExists) {
@@ -76,6 +66,16 @@ class AuthenticationService@Autowired constructor(
             val newUser = User.createNewUser(email, password, name)
             userRepository.save(newUser)
             return createNewSession(newUser)
+        }
+    }
+
+    private fun createNewSession(user: User): Session {
+        val sessionExists = sessionRepository.findByUserId(user.email).isPresent
+        return if (sessionExists) {
+            throw SessionAlreadyExistsException()
+        } else {
+            val newSession = Session(userId = user.email)
+            sessionRepository.save(newSession)
         }
     }
 }
