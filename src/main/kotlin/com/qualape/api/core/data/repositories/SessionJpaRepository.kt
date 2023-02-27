@@ -1,4 +1,4 @@
-package com.qualape.api.core.repositories
+package com.qualape.api.core.data.repositories
 
 import com.qualape.api.core.models.Session
 import org.springframework.data.jpa.repository.JpaRepository
@@ -7,7 +7,7 @@ import java.time.LocalDate
 import java.util.*
 
 @Repository
-interface SessionRepository: JpaRepository<Session, UUID> {
+interface SessionJpaRepository: JpaRepository<Session, UUID> {
     fun findByUserEmail(userEmail: String): Optional<Session>
     fun findByLastValidDay(lastValidDay: LocalDate): List<Session>
 }

@@ -1,23 +1,25 @@
 package com.qualape.api.core.services
 
 import com.qualape.api.core.models.Food
-import com.qualape.api.core.models.Session
-import com.qualape.api.core.repositories.FoodRepository
-import com.qualape.api.core.repositories.UserRepository
+import com.qualape.api.core.data.interactors.UserInteractor
+import com.qualape.api.core.data.repositories.FoodJpaRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
 class FoodService @Autowired constructor(
-    val foodRepository: FoodRepository,
-    val userRepository: UserRepository
+    val foodJpaRepository: FoodJpaRepository,
+    val userInteractor: UserInteractor
 ) {
 
     fun retrieveAllFoods(): List<Food> {
-        return foodRepository.findAll()
+        return foodJpaRepository.findAll()
     }
 
-    fun saveFoodInDatabase(food: Food, session: Session): Food {
-        return foodRepository.save(food)
+    fun saveFoodInDatabase(food: Food, userEmail: String): Food {
+        userInteractor.updateUserByEmail(userEmail) {
+            it.apply { foodIds.add(food.id) }
+        }
+        return foodJpaRepository.save(food)
     }
 }

@@ -1,23 +1,25 @@
 package com.qualape.api.core.services
 
-import com.qualape.api.core.repositories.JobRepository
+import com.qualape.api.core.models.Job
+import com.qualape.api.core.data.interactors.UserInteractor
+import com.qualape.api.core.data.repositories.JobJpaRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import com.qualape.api.core.models.Job
-import com.qualape.api.core.models.Session
-import com.qualape.api.core.repositories.UserRepository
 
 @Service
 class JobService @Autowired constructor(
-    val jobRepository: JobRepository,
-    val userRepository: UserRepository
+    val jobJpaRepository: JobJpaRepository,
+    val userInteractor: UserInteractor
 ) {
 
     fun retrieveAllJobs(): List<Job> {
-        return jobRepository.findAll()
+        return jobJpaRepository.findAll()
     }
 
-    fun saveJobInDatabase(job: Job, session: Session): Job {
-        return jobRepository.save(job)
+    fun saveJobInDatabase(job: Job, email: String): Job {
+        userInteractor.updateUserByEmail(email) {
+            it.apply { jobIds.add(job.id) }
+        }
+        return jobJpaRepository.save(job)
     }
 }

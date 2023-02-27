@@ -1,8 +1,8 @@
-package com.qualape.api.core.repositories
+package com.qualape.api.core.data.repositories
 
 import com.qualape.api.core.models.Job
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface JobRepository: JpaRepository<Job, Long>
+interface JobJpaRepository: JpaRepository<Job, Long>

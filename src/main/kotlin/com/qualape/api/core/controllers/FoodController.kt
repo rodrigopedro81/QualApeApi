@@ -21,7 +21,7 @@ class FoodController(
         @RequestParam userToken: UUID
     ): Food {
         return authenticationService.ifValidSessionExists(userToken) { session ->
-            foodService.saveFoodInDatabase(food, session)
+            foodService.saveFoodInDatabase(food, session.userEmail)
         }
     }
 

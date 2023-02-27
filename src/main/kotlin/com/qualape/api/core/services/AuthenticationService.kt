@@ -5,8 +5,8 @@ import com.qualape.api.core.errorHandling.SessionExceptions
 //import com.qualape.api.core.repositories.EmailService
 import com.qualape.api.core.models.Session
 import com.qualape.api.core.models.User
-import com.qualape.api.core.repositories.SessionRepository
-import com.qualape.api.core.repositories.UserRepository
+import com.qualape.api.core.data.repositories.SessionJpaRepository
+import com.qualape.api.core.data.repositories.UserJpaRepository
 import com.qualape.api.utils.Cryptographer.cryptographed
 import com.qualape.api.utils.Cryptographer.decryptographed
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,27 +16,27 @@ import java.util.*
 
 @Service
 class AuthenticationService @Autowired constructor(
-    private val sessionRepository: SessionRepository,
-    private val userRepository: UserRepository,
+    private val sessionJpaRepository: SessionJpaRepository,
+    private val userJpaRepository: UserJpaRepository,
 //    private val emailService: EmailService
 ) {
 
     private fun createNewSession(user: User): Session {
-        val sessionExists = sessionRepository.findByUserEmail(user.email).isPresent
+        val sessionExists = sessionJpaRepository.findByUserEmail(user.email).isPresent
         return if (sessionExists) {
             throw SessionExceptions.SessionAlreadyExistsException()
         } else {
             val newSession = Session(userEmail = user.email)
-            sessionRepository.save(newSession)
+            sessionJpaRepository.save(newSession)
         }
     }
 
     private fun removeExpiredSession(token: UUID) {
-        sessionRepository.deleteById(token)
+        sessionJpaRepository.deleteById(token)
     }
 
     fun <T> ifValidSessionExists(token: UUID, onValidSessionFound: (Session) -> T) : T {
-        val sessionRequest = sessionRepository.findById(token)
+        val sessionRequest = sessionJpaRepository.findById(token)
         return if (sessionRequest.isPresent) {
             val sessionData = sessionRequest.get()
             if (sessionData.lastValidDay >= LocalDate.now()) {
@@ -51,7 +51,7 @@ class AuthenticationService @Autowired constructor(
     }
 
     fun loginUser(email:String, password:String): Session {
-        val userRequest = userRepository.findById(email)
+        val userRequest = userJpaRepository.findById(email)
         if (userRequest.isPresent) {
             val userData = userRequest.get()
             if (password == userData.password.decryptographed()) {
@@ -65,12 +65,12 @@ class AuthenticationService @Autowired constructor(
     }
 
     fun registerNewUser(email: String, password: String, name:String): Session {
-        val userExists = userRepository.existsById(email)
+        val userExists = userJpaRepository.existsById(email)
         if (userExists) {
             throw SessionExceptions.UserAlreadyExistsException()
         } else {
             val newUser = User.createNewUser(email, password.cryptographed(), name)
-            userRepository.save(newUser)
+            userJpaRepository.save(newUser)
 //            val newEmail = OnRegisterEmailBuilder().buildEmail(name)
 //            emailService.send(email, newEmail)
             return createNewSession(newUser)

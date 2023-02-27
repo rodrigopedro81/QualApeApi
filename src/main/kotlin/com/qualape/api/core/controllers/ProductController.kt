@@ -20,9 +20,9 @@ class ProductController(
     fun saveProduct(
         @RequestBody @Valid product: Product,
         @RequestParam userToken: UUID
-    ): User {
+    ): Product {
         return authenticationService.ifValidSessionExists(userToken) { session ->
-            productService.saveProductInDatabase(product, session)
+            productService.saveProductInDatabase(product, session.userEmail)
         }
     }
 

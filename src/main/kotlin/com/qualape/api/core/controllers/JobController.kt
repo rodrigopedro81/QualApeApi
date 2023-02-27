@@ -21,7 +21,7 @@ class JobController(
         @RequestParam userToken: UUID
     ): Job {
         return authenticationService.ifValidSessionExists(userToken) { session ->
-            jobService.saveJobInDatabase(job, session)
+            jobService.saveJobInDatabase(job, session.userEmail)
         }
     }
 
