@@ -1,13 +1,13 @@
-package com.qualape.api.models
+package com.qualape.api.core.models
 
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "TB_FOOD")
-data class Food(
+@Table(name = "TB_JOB")
+data class Job(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long?,
+    val id: Long,
     @Column(nullable = false)
     val name: String,
     @Column(nullable = false)

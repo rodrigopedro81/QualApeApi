@@ -1,4 +1,4 @@
-package com.qualape.api.security
+package com.qualape.api.utils
 
 import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
@@ -11,7 +11,7 @@ import javax.crypto.IllegalBlockSizeException
 import javax.crypto.NoSuchPaddingException
 import javax.crypto.spec.SecretKeySpec
 
-object BlowfishCryptographer {
+object Cryptographer {
 
     private const val ALGORITHM_NAME = "Blowfish"
     private const val CHARSET_NAME = "UTF-8"
@@ -29,7 +29,8 @@ object BlowfishCryptographer {
     fun String.cryptographed(): String {
         val keySpec = SecretKeySpec(key, ALGORITHM_NAME)
         cipher.init(Cipher.ENCRYPT_MODE, keySpec)
-        return Base64.getEncoder().encodeToString(cipher.
+        return Base64.getEncoder().encodeToString(
+            cipher.
         doFinal(this.toByteArray(charset(CHARSET_NAME))))
     }
 

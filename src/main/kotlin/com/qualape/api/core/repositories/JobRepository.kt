@@ -1,6 +1,6 @@
-package com.qualape.api.repositories
+package com.qualape.api.core.repositories
 
-import com.qualape.api.models.Job
+import com.qualape.api.core.models.Job
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 

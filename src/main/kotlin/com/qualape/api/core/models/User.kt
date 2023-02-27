@@ -1,4 +1,4 @@
-package com.qualape.api.models
+package com.qualape.api.core.models
 
 import jakarta.persistence.*
 
@@ -13,11 +13,11 @@ data class User(
     @Column(nullable = false)
     val name: String,
     @Column(nullable = true)
-    val foodIds: List<Long>,
+    val foodIds: ArrayList<Long>,
     @Column(nullable = true)
-    val productIds: List<Long>,
+    val productIds: ArrayList<Long>,
     @Column(nullable = true)
-    val jobIds: List<Long>,
+    val jobIds: ArrayList<Long>,
 ) {
     companion object {
         fun createNewUser(email: String, password: String, name: String): User {
@@ -25,9 +25,9 @@ data class User(
                 email = email,
                 password = password,
                 name = name,
-                foodIds = listOf(),
-                productIds = listOf(),
-                jobIds = listOf(),
+                foodIds = arrayListOf(),
+                productIds = arrayListOf(),
+                jobIds = arrayListOf(),
             )
         }
     }

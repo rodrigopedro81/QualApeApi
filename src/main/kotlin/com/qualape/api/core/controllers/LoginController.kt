@@ -1,7 +1,7 @@
-package com.qualape.api.controllers
+package com.qualape.api.core.controllers
 
-import com.qualape.api.models.Session
-import com.qualape.api.security.AuthenticationService
+import com.qualape.api.core.models.Session
+import com.qualape.api.core.services.AuthenticationService
 import org.springframework.web.bind.annotation.*
 
 @RestController

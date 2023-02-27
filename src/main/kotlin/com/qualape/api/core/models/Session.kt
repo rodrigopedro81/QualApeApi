@@ -1,4 +1,4 @@
-package com.qualape.api.models
+package com.qualape.api.core.models
 
 import jakarta.persistence.*
 import java.time.LocalDate
@@ -11,7 +11,7 @@ data class Session(
     @GeneratedValue(strategy = GenerationType.UUID)
     val token: UUID? = null,
     @Column(nullable = false)
-    val userId: String,
+    val userEmail: String,
     @Column(nullable = false)
     val date: LocalDate = LocalDate.now(),
     @Column(nullable = false)

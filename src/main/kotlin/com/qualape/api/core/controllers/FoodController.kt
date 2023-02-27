@@ -1,8 +1,8 @@
-package com.qualape.api.controllers
+package com.qualape.api.core.controllers
 
-import com.qualape.api.models.Food
-import com.qualape.api.security.AuthenticationService
-import com.qualape.api.services.FoodService
+import com.qualape.api.core.models.Food
+import com.qualape.api.core.services.AuthenticationService
+import com.qualape.api.core.services.FoodService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -18,10 +18,10 @@ class FoodController(
     @PostMapping("/new")
     fun saveFood(
         @RequestBody @Valid food: Food,
-        @RequestParam sessionToken: Long
+        @RequestParam userToken: UUID
     ): Food {
-        return authenticationService.ifTokenIsValidReturn(sessionToken) {
-            foodService.saveNewFood(food)
+        return authenticationService.ifValidSessionExists(userToken) { session ->
+            foodService.saveFoodInDatabase(food, session)
         }
     }
 
