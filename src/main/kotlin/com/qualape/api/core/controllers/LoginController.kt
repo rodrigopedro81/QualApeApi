@@ -1,25 +1,26 @@
 package com.qualape.api.core.controllers
 
-import com.qualape.api.core.models.Session
+import com.qualape.api.commons.models.Session
+import com.qualape.api.commons.models.responses.SessionResponse
 import com.qualape.api.core.services.AuthenticationService
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@CrossOrigin(origins = ["*"], maxAge = 3600)
+@RequestMapping("/auth")
 class LoginController(
     val authenticationService: AuthenticationService
 ) {
 
-    @PostMapping("/login")
+    @PostMapping("/v1/login")
     fun login(
         @RequestParam email: String,
-        @RequestParam password: String,
-    ): Session = authenticationService.loginUser(email, password)
+        @RequestParam password: String
+    ): SessionResponse = authenticationService.loginUser(email, password).toSessionResponse()
 
-    @PostMapping("/register")
+    @PostMapping("/v1/register")
     fun register(
         @RequestParam email: String,
         @RequestParam password: String,
-        @RequestParam name: String,
-    ): Session = authenticationService.registerNewUser(email, password, name)
+        @RequestParam name: String
+    ): SessionResponse = authenticationService.registerNewUser(email, password, name).toSessionResponse()
 }

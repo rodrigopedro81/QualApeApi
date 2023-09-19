@@ -1,6 +1,6 @@
 package com.qualape.api.core.services
 
-import com.qualape.api.core.models.Product
+import com.qualape.api.commons.models.Product
 import com.qualape.api.core.data.interactors.UserInteractor
 import com.qualape.api.core.data.repositories.ProductJpaRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,9 +17,8 @@ class ProductService @Autowired constructor(
     }
 
     fun saveProductInDatabase(product: Product, email: String): Product {
-        userInteractor.updateUserByEmail(email) {
-            it.apply { productIds.add(product.id) }
+        return productJpaRepository.save(product).also { productWithNewId ->
+            userInteractor.saveProductToOwner(productWithNewId.id, email)
         }
-        return productJpaRepository.save(product)
     }
 }

@@ -1,7 +1,6 @@
-package com.qualape.api.utils
+package com.qualape.api.commons.cryptography
 
 import java.io.UnsupportedEncodingException
-import java.nio.charset.Charset
 import java.security.InvalidKeyException
 import java.security.NoSuchAlgorithmException
 import java.util.*
@@ -34,18 +33,18 @@ object Cryptographer {
         doFinal(this.toByteArray(charset(CHARSET_NAME))))
     }
 
-    @Throws(
-        NoSuchAlgorithmException::class,
-        NoSuchPaddingException::class,
-        InvalidKeyException::class,
-        IllegalBlockSizeException::class,
-        BadPaddingException::class
-    )
-    fun String.decryptographed(): String {
-        val keySpec = SecretKeySpec(key, ALGORITHM_NAME)
-        val bytes = Base64.getDecoder().decode(this)
-        cipher.init(Cipher.DECRYPT_MODE, keySpec)
-        val decrypted = cipher.doFinal(bytes)
-        return String(decrypted, Charset.forName(CHARSET_NAME))
-    }
+//    @Throws(
+//        NoSuchAlgorithmException::class,
+//        NoSuchPaddingException::class,
+//        InvalidKeyException::class,
+//        IllegalBlockSizeException::class,
+//        BadPaddingException::class
+//    )
+//    fun String.decryptographed(): String {
+//        val keySpec = SecretKeySpec(key, ALGORITHM_NAME)
+//        val bytes = Base64.getDecoder().decode(this)
+//        cipher.init(Cipher.DECRYPT_MODE, keySpec)
+//        val decrypted = cipher.doFinal(bytes)
+//        return String(decrypted, Charset.forName(CHARSET_NAME))
+//    }
 }

@@ -1,4 +1,4 @@
-package com.qualape.api.core.models
+package com.qualape.api.commons.models
 
 import jakarta.persistence.*
 
